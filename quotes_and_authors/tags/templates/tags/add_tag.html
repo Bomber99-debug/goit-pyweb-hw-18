@@ -1,0 +1,21 @@
+{% extends 'quotes_and_authors/base.html' %}
+
+{% block title %}
+<title>Add tags</title>
+{% endblock %}
+
+{% block content %}
+    {% csrf_token %}
+    <form class="row g-3" method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="{{ form.name.id_for_label }}"></label>
+
+            {{ form.name }}
+            {{ form.name.errors }}
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary mb-3">Confirm identity</button>
+        </div>
+    </form>
+{% endblock %}

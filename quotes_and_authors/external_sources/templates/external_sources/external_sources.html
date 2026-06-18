@@ -1,0 +1,14 @@
+{% extends 'quotes_and_authors/base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>Author</title>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'external_sources/style.css' %}">
+{% endblock %}
+
+{% block content %}
+   <a class="nav-link active" href="{% url 'external_sources:mongo_import' %}">MongoDB Import</a>
+{% endblock %}

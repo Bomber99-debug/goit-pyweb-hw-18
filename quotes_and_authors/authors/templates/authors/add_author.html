@@ -1,0 +1,39 @@
+{% extends 'quotes_and_authors/base.html' %}
+
+{% block title %}
+    <title>Add author</title>
+{% endblock %}
+
+{% block content %}
+    {% csrf_token %}
+    <form class="row g-3" method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="{{ form.fullname.id_for_label }}"></label>
+
+            {{ form.fullname }}
+            {{ form.fullname.errors }}
+        </div>
+        <div class="mb-3">
+            <label for="{{ form.born_date.id_for_label }}"></label>
+
+            {{ form.born_date }}
+            {{ form.born_date.errors }}
+        </div>
+        <div class="mb-3">
+            <label for="{{ form.born_location.id_for_label }}"></label>
+
+            {{ form.born_location }}
+            {{ form.born_location.errors }}
+        </div>
+        <div class="mb-3">
+            <label for="{{ form.description.id_for_label }}"></label>
+
+            {{ form.description }}
+            {{ form.description.errors }}
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary mb-3">Confirm identity</button>
+        </div>
+    </form>
+{% endblock %}

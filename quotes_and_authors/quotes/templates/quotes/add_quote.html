@@ -1,0 +1,34 @@
+{% extends 'quotes_and_authors/base.html' %}
+
+{% block title %}
+    <title>Add quote</title>
+{% endblock %}
+
+{% block content %}
+    <form class="row g-3 needs-validation" novalidate method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="{{ form.quote.id_for_label }}" class="form-label">Quote</label>
+            {{ form.quote }}
+            <div class="invalid-feedback">
+                Please enter a message in the textarea.
+            </div>
+        </div>
+        <div class="mb-3">
+            {{ form.author }}
+        </div>
+
+        {% for checkbox in form.tags %}
+            <div class="form-check form-switch">
+                {{ checkbox.tag }}
+                <label class="form-check-label" for="{{ checkbox.id_for_label }}">
+                    {{ checkbox.choice_label }}
+                </label>
+            </div>
+
+        {% endfor %}
+        <div class="col-12">
+            <button class="btn btn-primary" type="submit">Submit form</button>
+        </div>
+    </form>
+{% endblock %}
