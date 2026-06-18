@@ -1,35 +1,131 @@
 {% extends 'quotes_and_authors/base.html' %}
-{% load static %}
 
 {% block title %}
-    <title>Author</title>
+    <title>Authors</title>
 {% endblock %}
 
-{% block styles %}
-    <link rel="stylesheet" href="{% static 'authors/style.css' %}">
+{% block description %}
+    <meta name="description" content="Browse authors and their biographical information.">
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-4 col-rovs">
-            <div id="list-example" class="list-group">
-                {% for author in authors %}
-                    <a class="list-group-item list-group-item-action"
-                       href="#{{ author.fullname }}">{{ author.fullname }}</a>
-                {% endfor %}
+    <div class="authors-page">
+
+        <section class="authors-header">
+            <div>
+                <p class="authors-kicker">People behind the quotes</p>
+                <h2 class="authors-title">Authors directory</h2>
+                <p class="authors-subtitle">
+                    Explore authors, their origins, and the biographical details attached to the quotes collection.
+                </p>
             </div>
-        </div>
-        <div class="col-8">
-            <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true"
-                 class="scrollspy-example scroll-ex"
-                 tabindex="0">
-                {% for author in authors %}
-                    <h4 id="{{ author.fullname }}">{{ author.fullname }}</h4>
-                    <p>{{ author.born_date }}</p>
-                    <p>{{ author.born_location }}</p>
-                    <p>{{ author.description }}</p>
-                {% endfor %}
+
+            <div class="authors-stat">
+                <span class="authors-stat-value">{{ authors|length }}</span>
+                <span class="authors-stat-label">Authors</span>
             </div>
+        </section>
+
+        <section class="authors-search-panel">
+            <label for="authorSearch" class="authors-search-label">
+                Search authors
+            </label>
+
+            <div class="authors-search-box">
+                <input id="authorSearch"
+                       class="authors-search-input"
+                       type="search"
+                       placeholder="Type name, date, location, or biography..."
+                       autocomplete="off">
+
+                <button class="authors-search-clear" type="button" data-clear-authors-search>
+                    Clear
+                </button>
+            </div>
+        </section>
+
+        <div class="authors-layout">
+
+            <aside class="authors-sidebar">
+                <div class="authors-sidebar-card">
+                    <h3 class="authors-sidebar-title">Author list</h3>
+
+                    <div class="authors-nav-list" data-authors-nav>
+                        {% for author in authors %}
+                            <a class="authors-nav-link"
+                               href="#author-{{ forloop.counter }}"
+                               data-author-link>
+                                <span>{{ author.fullname }}</span>
+                            </a>
+                        {% empty %}
+                            <p class="authors-empty-small">
+                                No authors yet. Literature departments everywhere are concerned.
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </aside>
+
+            <section class="authors-grid" data-authors-grid>
+                {% for author in authors %}
+                    <article id="author-{{ forloop.counter }}"
+                             class="author-card"
+                             data-author-card
+                             data-search-text="{{ author.fullname }} {{ author.born_date }} {{ author.born_location }} {{ author.description }}">
+
+                        <div class="author-card-top">
+                            <div class="author-avatar">
+                                {{ author.fullname|first }}
+                            </div>
+
+                            <div>
+                                <h3 class="author-name">
+                                    {{ author.fullname }}
+                                </h3>
+
+                                <p class="author-meta">
+                                    <span>{{ author.born_date }}</span>
+                                    <span>{{ author.born_location }}</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="author-bio">
+                            <p>
+                                {{ author.description }}
+                            </p>
+                        </div>
+
+                        <a class="author-back-top" href="#authorSearch">
+                            Back to search
+                        </a>
+                    </article>
+                {% empty %}
+                    <div class="authors-empty-state">
+                        <div class="authors-empty-icon">∅</div>
+                        <h3>No authors yet</h3>
+                        <p>
+                            Nobody has been added. The quotes are currently floating without parental supervision.
+                        </p>
+
+                        {% if user.is_authenticated %}
+                            <a class="authors-empty-action" href="{% url 'authors:add_author' %}">
+                                Add first author
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </section>
+
         </div>
+
+        <div class="authors-no-results" data-authors-no-results hidden>
+            <div class="authors-empty-icon">?</div>
+            <h3>No matches</h3>
+            <p>
+                Nothing found. Either the author is missing, or the search has developed artistic standards.
+            </p>
+        </div>
+
     </div>
 {% endblock %}

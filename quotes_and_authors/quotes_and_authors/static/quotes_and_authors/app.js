@@ -186,3 +186,80 @@
 
     updatePreview();
 })();
+(() => {
+    const searchInput = document.querySelector("#authorSearch");
+    const clearButton = document.querySelector("[data-clear-authors-search]");
+    const authorCards = Array.from(document.querySelectorAll("[data-author-card]"));
+    const authorLinks = Array.from(document.querySelectorAll("[data-author-link]"));
+    const noResults = document.querySelector("[data-authors-no-results]");
+
+    if (!searchInput || authorCards.length === 0) {
+        return;
+    }
+
+    const normalize = (value) => value.toLowerCase().trim();
+
+    const setActiveLink = (visibleCard) => {
+        const activeId = visibleCard ? visibleCard.id : "";
+
+        authorLinks.forEach((link) => {
+            const linkId = link.getAttribute("href").replace("#", "");
+            link.classList.toggle("is-active", linkId === activeId);
+        });
+    };
+
+    const applyFilter = (rawValue) => {
+        const value = normalize(rawValue);
+        let visibleCount = 0;
+        let firstVisibleCard = null;
+
+        authorCards.forEach((card) => {
+            const text = normalize(card.dataset.searchText || "");
+            const isVisible = value === "" || text.includes(value);
+
+            card.hidden = !isVisible;
+
+            if (isVisible) {
+                visibleCount += 1;
+
+                if (!firstVisibleCard) {
+                    firstVisibleCard = card;
+                }
+            }
+        });
+
+        authorLinks.forEach((link) => {
+            const targetId = link.getAttribute("href").replace("#", "");
+            const targetCard = document.getElementById(targetId);
+
+            link.hidden = targetCard ? targetCard.hidden : false;
+        });
+
+        if (noResults) {
+            noResults.hidden = visibleCount !== 0;
+        }
+
+        setActiveLink(firstVisibleCard);
+    };
+
+    searchInput.addEventListener("input", () => {
+        applyFilter(searchInput.value);
+    });
+
+    if (clearButton) {
+        clearButton.addEventListener("click", () => {
+            searchInput.value = "";
+            applyFilter("");
+            searchInput.focus();
+        });
+    }
+
+    authorLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+            authorLinks.forEach((item) => item.classList.remove("is-active"));
+            link.classList.add("is-active");
+        });
+    });
+
+    applyFilter("");
+})();
