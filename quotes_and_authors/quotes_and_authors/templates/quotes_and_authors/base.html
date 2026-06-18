@@ -1,197 +1,160 @@
-{% load static %}
+{% extends 'quotes_and_authors/base.html' %}
 
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block title %}
+    <title>Quotes</title>
+{% endblock %}
 
-    {% block title %}
-        <title>Quotes & Authors</title>
-    {% endblock %}
+{% block description %}
+    <meta name="description" content="Browse quotes, authors and tags.">
+{% endblock %}
 
-    {% block description %}
-        <meta name="description" content="Collection of quotes, authors and tags.">
-    {% endblock %}
+{% block content %}
+    <div class="quotes-page">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-          crossorigin="anonymous">
+        <section class="quotes-toolbar">
+            <div>
+                <p class="quotes-kicker">Library</p>
+                <h2 class="quotes-title">Quotes collection</h2>
+                <p class="quotes-subtitle">
+                    Browse saved quotes, discover authors, and pretend tags make chaos organized.
+                </p>
+            </div>
 
-    <link rel="stylesheet" type="text/css" href="{% static 'quotes_and_authors/style.css' %}">
+            <div class="quotes-stats">
+                <div class="quotes-stat">
+                    <span class="quotes-stat-value">{{ quotes|length }}</span>
+                    <span class="quotes-stat-label">Quotes</span>
+                </div>
 
-    {% block styles %}
-    {% endblock %}
-</head>
+                <div class="quotes-stat">
+                    <span class="quotes-stat-value">{{ authors|length }}</span>
+                    <span class="quotes-stat-label">Authors</span>
+                </div>
 
-<body>
-<div class="qa-page-shell">
+                <div class="quotes-stat">
+                    <span class="quotes-stat-value">{{ tags|length }}</span>
+                    <span class="quotes-stat-label">Tags</span>
+                </div>
+            </div>
+        </section>
 
-    <nav class="navbar navbar-expand-lg qa-navbar sticky-top">
-        <div class="container">
-            <a class="navbar-brand qa-brand" href="{% url 'quotes:home' %}">
-                <span class="qa-brand-mark">Q</span>
-                <span class="qa-brand-text">
-                    <strong>Quotes</strong>
-                    <small>& Authors</small>
-                </span>
-            </a>
+        <section class="quotes-search-panel">
+            <label for="quoteSearch" class="quotes-search-label">
+                Search in quotes
+            </label>
 
-            <button class="navbar-toggler qa-navbar-toggler" type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#mainNavigation"
-                    aria-controls="mainNavigation"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <div class="quotes-search-box">
+                <input id="quoteSearch"
+                       class="quotes-search-input"
+                       type="search"
+                       placeholder="Type quote, author, or tag..."
+                       autocomplete="off">
 
-            <div class="collapse navbar-collapse" id="mainNavigation">
-                <ul class="navbar-nav qa-nav-list mx-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link qa-nav-link" href="{% url 'quotes:home' %}">
-                            Quotes
-                        </a>
-                    </li>
+                <button class="quotes-search-clear" type="button" data-clear-quotes-search>
+                    Clear
+                </button>
+            </div>
+        </section>
 
-                    <li class="nav-item">
-                        <a class="nav-link qa-nav-link" href="{% url 'authors:authors' %}">
-                            Authors
-                        </a>
-                    </li>
+        <div class="quotes-layout">
 
-                    <li class="nav-item">
-                        <a class="nav-link qa-nav-link" href="{% url 'tags:tags' %}">
-                            Tags
-                        </a>
-                    </li>
+            <aside class="quotes-sidebar">
+                <div class="quotes-sidebar-card">
+                    <h3 class="quotes-sidebar-title">Popular tags</h3>
 
-                    {% if user.is_authenticated %}
-                        <li class="nav-item dropdown">
-                            <button class="nav-link qa-nav-link qa-dropdown-button dropdown-toggle"
+                    <div class="quotes-tag-cloud">
+                        {% for tag in tags %}
+                            <button class="quotes-tag-filter"
                                     type="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                Create
+                                    data-quote-filter="{{ tag.name|default:tag }}">
+                                #{{ tag.name|default:tag }}
                             </button>
+                        {% empty %}
+                            <p class="quotes-empty-small">
+                                No tags yet. The taxonomy department has failed again.
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
 
-                            <ul class="dropdown-menu qa-dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item qa-dropdown-item" href="{% url 'quotes:add_quote' %}">
-                                        Add quote
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item qa-dropdown-item" href="{% url 'authors:add_author' %}">
-                                        Add author
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item qa-dropdown-item" href="{% url 'tags:add_tag' %}">
-                                        Add tag
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                <div class="quotes-sidebar-card">
+                    <h3 class="quotes-sidebar-title">Authors</h3>
 
-                        <li class="nav-item">
-                            <a class="nav-link qa-nav-link" href="{% url 'external_sources:external_sources' %}">
-                                Import
+                    <div class="quotes-author-list">
+                        {% for author in authors %}
+                            <button class="quotes-author-filter"
+                                    type="button"
+                                    data-quote-filter="{{ author.fullname|default:author }}">
+                                {{ author.fullname|default:author }}
+                            </button>
+                        {% empty %}
+                            <p class="quotes-empty-small">
+                                No authors yet.
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </aside>
+
+            <section class="quotes-grid" data-quotes-grid>
+                {% for quote in quotes %}
+                    <article class="quote-card"
+                             data-quote-card
+                             data-search-text="{{ quote.quote }} {{ quote.author }} {% for tag in quote.tags.all %} {{ tag }} {% endfor %}">
+                        <div class="quote-card-mark">“</div>
+
+                        <blockquote class="quote-card-text">
+                            {{ quote.quote }}
+                        </blockquote>
+
+                        <div class="quote-card-footer">
+                            <p class="quote-card-author">
+                                {{ quote.author }}
+                            </p>
+
+                            <div class="quote-card-tags">
+                                {% for tag in quote.tags.all %}
+                                    <span class="quote-card-tag">
+                                        #{{ tag }}
+                                    </span>
+                                {% empty %}
+                                    <span class="quote-card-tag quote-card-tag-muted">
+                                        no tags
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </article>
+                {% empty %}
+                    <div class="quotes-empty-state">
+                        <div class="quotes-empty-icon">∅</div>
+                        <h3>No quotes yet</h3>
+                        <p>
+                            The collection is empty. Humanity has briefly stopped quoting itself. Suspicious.
+                        </p>
+
+                        {% if user.is_authenticated %}
+                            <a class="quotes-empty-action" href="{% url 'quotes:add_quote' %}">
+                                Add first quote
                             </a>
-                        </li>
-                    {% endif %}
-                </ul>
-
-                <div class="qa-auth-panel">
-                    {% if user.is_authenticated %}
-                        <div class="qa-user-pill">
-                            <span class="qa-user-dot"></span>
-                            <span class="qa-user-name">
-                                {{ user.username }}
-                            </span>
-                        </div>
-
-                        <form method="POST" action="{% url 'users:logout' %}" class="qa-logout-form">
-                            {% csrf_token %}
-                            <button type="submit" class="btn qa-btn qa-btn-muted">
-                                Logout
-                            </button>
-                        </form>
-                    {% else %}
-                        <a class="btn qa-btn qa-btn-muted" href="{% url 'users:login' %}">
-                            Login
-                        </a>
-                        <a class="btn qa-btn qa-btn-main" href="{% url 'users:register' %}">
-                            Register
-                        </a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <header class="qa-hero">
-        <div class="container">
-            <div class="qa-hero-card">
-                <div>
-                    <p class="qa-eyebrow">Curated words, because apparently humans need quotes to remember thinking exists.</p>
-                    <h1 class="qa-hero-title">
-                        Find quotes. Explore authors. Collect ideas.
-                    </h1>
-                </div>
-
-                {% if user.is_authenticated %}
-                    <a class="qa-hero-action" href="{% url 'quotes:add_quote' %}">
-                        Add new quote
-                    </a>
-                {% else %}
-                    <a class="qa-hero-action" href="{% url 'users:login' %}">
-                        Sign in to contribute
-                    </a>
-                {% endif %}
-            </div>
-        </div>
-    </header>
-
-    <main class="qa-main">
-        <div class="container">
-
-            {% if messages %}
-                <div class="qa-messages" aria-live="polite">
-                    {% for message in messages %}
-                        <div class="qa-message qa-message-{{ message.tags|default:'info' }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-
-            <section class="qa-content-card">
-                {% block content %}
-                {% endblock %}
+                        {% else %}
+                            <a class="quotes-empty-action" href="{% url 'users:login' %}">
+                                Sign in to add quotes
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
             </section>
 
         </div>
-    </main>
 
-    <footer class="qa-footer">
-        <div class="container">
-            <div class="qa-footer-inner">
-                <span>Quotes & Authors</span>
-                <span class="qa-footer-muted">Built with Django, caffeine, and questionable optimism.</span>
-            </div>
+        <div class="quotes-no-results" data-quotes-no-results hidden>
+            <div class="quotes-empty-icon">?</div>
+            <h3>No matches</h3>
+            <p>
+                Nothing found. Either the search is too clever, or the quotes are hiding from responsibility.
+            </p>
         </div>
-    </footer>
 
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
-
-<script src="{% static 'quotes_and_authors/app.js' %}"></script>
-
-{% block scripts %}
+    </div>
 {% endblock %}
-</body>
-</html>
