@@ -1,19 +1,91 @@
 {% extends 'quotes_and_authors/base.html' %}
 
 {% block title %}
-<title>Tags</title>
+    <title>Tags</title>
+{% endblock %}
+
+{% block description %}
+    <meta name="description" content="Browse available quote tags.">
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-8">
-            <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true"
-                 class="scrollspy-example scroll-ex"
-                 tabindex="0">
-                {% for tag in tags %}
-                    <h4 id="{{ tag.name }}">{{ tag.name }}</h4>
-                {% endfor %}
+    <div class="tags-page">
+
+        <section class="tags-header">
+            <div>
+                <p class="tags-kicker">Index</p>
+                <h2 class="tags-title">Tags collection</h2>
+                <p class="tags-subtitle">
+                    Browse every tag used to classify quotes, because apparently even inspiration needs labels.
+                </p>
             </div>
+
+            <div class="tags-stat">
+                <span class="tags-stat-value">{{ tags|length }}</span>
+                <span class="tags-stat-label">Tags</span>
+            </div>
+        </section>
+
+        <section class="tags-search-panel">
+            <label for="tagSearch" class="tags-search-label">
+                Search tags
+            </label>
+
+            <div class="tags-search-box">
+                <input id="tagSearch"
+                       class="tags-search-input"
+                       type="search"
+                       placeholder="Type tag name..."
+                       autocomplete="off">
+
+                <button class="tags-search-clear" type="button" data-clear-tags-search>
+                    Clear
+                </button>
+            </div>
+        </section>
+
+        <section class="tags-cloud" data-tags-cloud>
+            {% for tag in tags %}
+                <article class="tag-card"
+                         data-tag-card
+                         data-search-text="{{ tag.name }}"
+                         id="tag-{{ forloop.counter }}">
+                    <div class="tag-card-icon">#</div>
+
+                    <div class="tag-card-body">
+                        <h3 class="tag-card-name">
+                            {{ tag.name }}
+                        </h3>
+
+                        <p class="tag-card-description">
+                            Quotes marked with this idea live under this tag.
+                        </p>
+                    </div>
+                </article>
+            {% empty %}
+                <div class="tags-empty-state">
+                    <div class="tags-empty-icon">∅</div>
+                    <h3>No tags yet</h3>
+                    <p>
+                        No tags have been added. Chaos has won, briefly.
+                    </p>
+
+                    {% if user.is_authenticated %}
+                        <a class="tags-empty-action" href="{% url 'tags:add_tag' %}">
+                            Add first tag
+                        </a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </section>
+
+        <div class="tags-no-results" data-tags-no-results hidden>
+            <div class="tags-empty-icon">?</div>
+            <h3>No matches</h3>
+            <p>
+                Nothing found. The tag either does not exist, or it has chosen a quieter life.
+            </p>
         </div>
+
     </div>
 {% endblock %}

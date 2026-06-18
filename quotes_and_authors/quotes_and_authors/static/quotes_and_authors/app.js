@@ -335,3 +335,49 @@
 
     updatePreview();
 })();
+(() => {
+    const searchInput = document.querySelector("#tagSearch");
+    const clearButton = document.querySelector("[data-clear-tags-search]");
+    const tagCards = Array.from(document.querySelectorAll("[data-tag-card]"));
+    const noResults = document.querySelector("[data-tags-no-results]");
+
+    if (!searchInput || tagCards.length === 0) {
+        return;
+    }
+
+    const normalize = (value) => value.toLowerCase().trim();
+
+    const applyFilter = (rawValue) => {
+        const value = normalize(rawValue);
+        let visibleCount = 0;
+
+        tagCards.forEach((card) => {
+            const text = normalize(card.dataset.searchText || "");
+            const isVisible = value === "" || text.includes(value);
+
+            card.hidden = !isVisible;
+
+            if (isVisible) {
+                visibleCount += 1;
+            }
+        });
+
+        if (noResults) {
+            noResults.hidden = visibleCount !== 0;
+        }
+    };
+
+    searchInput.addEventListener("input", () => {
+        applyFilter(searchInput.value);
+    });
+
+    if (clearButton) {
+        clearButton.addEventListener("click", () => {
+            searchInput.value = "";
+            applyFilter("");
+            searchInput.focus();
+        });
+    }
+
+    applyFilter("");
+})();
