@@ -1,21 +1,96 @@
 {% extends 'quotes_and_authors/base.html' %}
 
 {% block title %}
-<title>Add tags</title>
+    <title>Add tag</title>
+{% endblock %}
+
+{% block description %}
+    <meta name="description" content="Add a new quote tag.">
 {% endblock %}
 
 {% block content %}
-    {% csrf_token %}
-    <form class="row g-3" method="POST">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="{{ form.name.id_for_label }}"></label>
+    <div class="add-tag-page">
 
-            {{ form.name }}
-            {{ form.name.errors }}
+        <section class="add-tag-header">
+            <div>
+                <p class="add-tag-kicker">Create</p>
+                <h2 class="add-tag-title">Add a new tag</h2>
+                <p class="add-tag-subtitle">
+                    Create a tag for grouping quotes. Tiny label, massive illusion of order.
+                </p>
+            </div>
+
+            <a class="add-tag-back" href="{% url 'tags:tags' %}">
+                Back to tags
+            </a>
+        </section>
+
+        <div class="add-tag-layout">
+
+            <form class="add-tag-form" method="POST" novalidate data-add-tag-form>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="add-tag-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="add-tag-field">
+                    <div class="add-tag-label-row">
+                        <label for="{{ form.name.id_for_label }}" class="add-tag-label">
+                            Tag name
+                        </label>
+
+                        <span class="add-tag-counter" data-tag-name-counter>
+                            0 characters
+                        </span>
+                    </div>
+
+                    <div class="add-tag-control add-tag-name-field">
+                        {{ form.name }}
+                    </div>
+
+                    {% if form.name.errors %}
+                        <div class="add-tag-field-errors">
+                            {{ form.name.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="add-tag-actions">
+                    <button class="add-tag-submit" type="submit" data-add-tag-submit>
+                        Save tag
+                    </button>
+
+                    <a class="add-tag-cancel" href="{% url 'tags:tags' %}">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+
+            <aside class="add-tag-preview">
+                <div class="add-tag-preview-card">
+                    <p class="add-tag-preview-label">Live preview</p>
+
+                    <div class="add-tag-preview-icon">#</div>
+
+                    <h3 class="add-tag-preview-name" data-tag-preview-name>
+                        tag-name
+                    </h3>
+
+                    <p class="add-tag-preview-description">
+                        Quotes marked with this idea will live under this tag.
+                    </p>
+                </div>
+
+                <div class="add-tag-note">
+                    <strong>Small rule:</strong>
+                    use short, readable names. Nobody wants a tag that looks like a legal contract.
+                </div>
+            </aside>
+
         </div>
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary mb-3">Confirm identity</button>
-        </div>
-    </form>
+
+    </div>
 {% endblock %}

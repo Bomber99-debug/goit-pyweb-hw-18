@@ -381,3 +381,51 @@
 
     applyFilter("");
 })();
+(() => {
+    const form = document.querySelector("[data-add-tag-form]");
+
+    if (!form) {
+        return;
+    }
+
+    const nameInput = form.querySelector(".add-tag-name-field input");
+    const nameCounter = document.querySelector("[data-tag-name-counter]");
+    const previewName = document.querySelector("[data-tag-preview-name]");
+    const submitButton = document.querySelector("[data-add-tag-submit]");
+
+    const emptyName = "tag-name";
+
+    const normalizeTag = (value) => {
+        return value
+            .trim()
+            .replace(/\s+/g, "-")
+            .toLowerCase();
+    };
+
+    const updatePreview = () => {
+        const rawName = nameInput ? nameInput.value : "";
+        const normalizedName = normalizeTag(rawName);
+
+        if (nameCounter) {
+            nameCounter.textContent = `${rawName.length} characters`;
+        }
+
+        if (previewName) {
+            previewName.textContent = normalizedName || emptyName;
+        }
+    };
+
+    if (nameInput) {
+        nameInput.addEventListener("input", updatePreview);
+        nameInput.addEventListener("change", updatePreview);
+    }
+
+    form.addEventListener("submit", () => {
+        if (submitButton) {
+            submitButton.classList.add("is-submitting");
+            submitButton.textContent = "Saving...";
+        }
+    });
+
+    updatePreview();
+})();
