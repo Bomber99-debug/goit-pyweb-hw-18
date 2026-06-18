@@ -450,3 +450,33 @@
         importLink.textContent = "Importing...";
     });
 })();
+(() => {
+    const form = document.querySelector("[data-mongo-import-form]");
+
+    if (!form) {
+        return;
+    }
+
+    const submitButton = document.querySelector("[data-mongo-import-submit]");
+    const passwordInput = form.querySelector("input[type='password']");
+
+    if (passwordInput) {
+        passwordInput.setAttribute("autocomplete", "current-password");
+    }
+
+    form.addEventListener("submit", (event) => {
+        const confirmed = window.confirm(
+            "Start MongoDB import? This may create records in your local database."
+        );
+
+        if (!confirmed) {
+            event.preventDefault();
+            return;
+        }
+
+        if (submitButton) {
+            submitButton.classList.add("is-submitting");
+            submitButton.textContent = "Importing...";
+        }
+    });
+})();

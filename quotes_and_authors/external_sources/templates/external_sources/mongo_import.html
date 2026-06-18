@@ -1,65 +1,174 @@
 {% extends 'quotes_and_authors/base.html' %}
-{% load static %}
 
 {% block title %}
-    <title>Author</title>
+    <title>MongoDB import</title>
 {% endblock %}
 
-{% block styles %}
-    <link rel="stylesheet" href="{% static 'external_sources/style.css' %}">
+{% block description %}
+    <meta name="description" content="Import authors, quotes and tags from MongoDB.">
 {% endblock %}
 
 {% block content %}
-    <form class="flex" method="POST">
-        {% csrf_token %}
-        <label for="{{ form.username.id_for_label }}" class="form-label">
-            {{ form.username.label }}
-        </label>
+    <div class="mongo-import-page">
 
-        <div class="input-group mb-3">
-            {{ form.username }}
+        <section class="mongo-import-header">
+            <div>
+                <p class="mongo-import-kicker">External source</p>
+                <h2 class="mongo-import-title">MongoDB import</h2>
+                <p class="mongo-import-subtitle">
+                    Connect to MongoDB and import authors, quotes, and tags into this Django project.
+                    Another database migration, because apparently data enjoys travel.
+                </p>
+            </div>
+
+            <a class="mongo-import-back" href="{% url 'external_sources:external_sources' %}">
+                Back to external sources
+            </a>
+        </section>
+
+        <div class="mongo-import-layout">
+
+            <form class="mongo-import-form" method="POST" novalidate data-mongo-import-form>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="mongo-import-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="mongo-import-field">
+                    <label for="{{ form.username.id_for_label }}" class="mongo-import-label">
+                        {{ form.username.label }}
+                    </label>
+
+                    <div class="mongo-import-control">
+                        {{ form.username }}
+                    </div>
+
+                    {% if form.username.errors %}
+                        <div class="mongo-import-field-errors">
+                            {{ form.username.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mongo-import-field">
+                    <label for="{{ form.password.id_for_label }}" class="mongo-import-label">
+                        {{ form.password.label }}
+                    </label>
+
+                    <div class="mongo-import-control">
+                        {{ form.password }}
+                    </div>
+
+                    {% if form.password.errors %}
+                        <div class="mongo-import-field-errors">
+                            {{ form.password.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mongo-import-row">
+                    <div class="mongo-import-field">
+                        <label for="{{ form.db_name.id_for_label }}" class="mongo-import-label">
+                            {{ form.db_name.label }}
+                        </label>
+
+                        <div class="mongo-import-control">
+                            {{ form.db_name }}
+                        </div>
+
+                        {% if form.db_name.errors %}
+                            <div class="mongo-import-field-errors">
+                                {{ form.db_name.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mongo-import-field">
+                        <label for="{{ form.app_name.id_for_label }}" class="mongo-import-label">
+                            {{ form.app_name.label }}
+                        </label>
+
+                        <div class="mongo-import-control">
+                            {{ form.app_name }}
+                        </div>
+
+                        {% if form.app_name.errors %}
+                            <div class="mongo-import-field-errors">
+                                {{ form.app_name.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mongo-import-field">
+                    <label for="{{ form.host.id_for_label }}" class="mongo-import-label">
+                        {{ form.host.label }}
+                    </label>
+
+                    <div class="mongo-import-control">
+                        {{ form.host }}
+                    </div>
+
+                    {% if form.host.errors %}
+                        <div class="mongo-import-field-errors">
+                            {{ form.host.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mongo-import-hint">
+                    <strong>Expected MongoDB collections:</strong>
+                    <span>author</span>
+                    <span>quote</span>
+                    <small>Tags will be taken from the <code>tags</code> field in quotes.</small>
+                </div>
+
+                <div class="mongo-import-actions">
+                    <button class="mongo-import-submit" type="submit" data-mongo-import-submit>
+                        Start import
+                    </button>
+
+                    <a class="mongo-import-cancel" href="{% url 'external_sources:external_sources' %}">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+
+            <aside class="mongo-import-panel">
+                <div class="mongo-import-panel-card">
+                    <div class="mongo-import-panel-icon">MDB</div>
+
+                    <h3>Import checklist</h3>
+
+                    <ul class="mongo-import-checklist">
+                        <li>Database user exists in MongoDB Atlas.</li>
+                        <li>Password is current.</li>
+                        <li>Host is copied without protocol prefix.</li>
+                        <li>Collections are named <code>author</code> and <code>quote</code>.</li>
+                    </ul>
+                </div>
+
+                <div class="mongo-import-warning">
+                    <strong>Do not paste secrets into Git.</strong>
+                    Use this form locally. Public repositories do not need your database password,
+                    despite their endless hunger for embarrassment.
+                </div>
+            </aside>
+
         </div>
 
-        <label for="{{ form.password.id_for_label }}" class="form-label">
-            {{ form.password.label }}
-        </label>
+        {% if messages %}
+            <section class="mongo-import-messages" aria-live="polite">
+                {% for message in messages %}
+                    <div class="mongo-import-message mongo-import-message-{{ message.tags|default:'info' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </section>
+        {% endif %}
 
-        <div class="input-group mb-3">
-            {{ form.password }}
-        </div>
-
-        <label for="{{ form.db_name.id_for_label }}" class="form-label">
-            {{ form.db_name.label }}
-        </label>
-
-        <div class="input-group mb-3">
-            {{ form.db_name }}
-        </div>
-
-        <label for="{{ form.host.id_for_label }}" class="form-label">
-            {{ form.host.label }}
-        </label>
-
-        <div class="input-group mb-3">
-            {{ form.host }}
-        </div>
-
-        <label for="{{ form.app_name.id_for_label }}" class="form-label">
-            {{ form.app_name.label }}
-        </label>
-
-        <div class="input-group mb-3">
-            {{ form.app_name }}
-        </div>
-        <p>Імпорт очікує колекції MongoDB: author та quote. Теги будуть взяті з поля tags у quotes.</p>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-    {% if messages %}
-        <div class="alert alert-light" role="alert">
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
-        </div>
-    {% endif %}
-
+    </div>
 {% endblock %}
