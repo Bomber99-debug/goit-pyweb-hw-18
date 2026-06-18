@@ -4,12 +4,157 @@
     <title>Quotes</title>
 {% endblock %}
 
+{% block description %}
+    <meta name="description" content="Browse quotes, authors and tags.">
+{% endblock %}
+
 {% block content %}
-    {% for quote in quotes %}
-        <p>{{ quote.quote }}</p>
-        <p>{{ quote.author }}</p>
-        {% for tag in quote.tags.all %}
-            <p>{{ tag }}</p>
-        {% endfor %}
-    {% endfor %}
+    <div class="quotes-page">
+
+        <section class="quotes-toolbar">
+            <div>
+                <p class="quotes-kicker">Library</p>
+                <h2 class="quotes-title">Quotes collection</h2>
+                <p class="quotes-subtitle">
+                    Browse saved quotes, discover authors, and pretend tags make chaos organized.
+                </p>
+            </div>
+
+            <div class="quotes-stats">
+                <div class="quotes-stat">
+                    <span class="quotes-stat-value">{{ quotes|length }}</span>
+                    <span class="quotes-stat-label">Quotes</span>
+                </div>
+
+                <div class="quotes-stat">
+                    <span class="quotes-stat-value">{{ authors|length }}</span>
+                    <span class="quotes-stat-label">Authors</span>
+                </div>
+
+                <div class="quotes-stat">
+                    <span class="quotes-stat-value">{{ tags|length }}</span>
+                    <span class="quotes-stat-label">Tags</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="quotes-search-panel">
+            <label for="quoteSearch" class="quotes-search-label">
+                Search in quotes
+            </label>
+
+            <div class="quotes-search-box">
+                <input id="quoteSearch"
+                       class="quotes-search-input"
+                       type="search"
+                       placeholder="Type quote, author, or tag..."
+                       autocomplete="off">
+
+                <button class="quotes-search-clear" type="button" data-clear-quotes-search>
+                    Clear
+                </button>
+            </div>
+        </section>
+
+        <div class="quotes-layout">
+
+            <aside class="quotes-sidebar">
+                <div class="quotes-sidebar-card">
+                    <h3 class="quotes-sidebar-title">Popular tags</h3>
+
+                    <div class="quotes-tag-cloud">
+                        {% for tag in tags %}
+                            <button class="quotes-tag-filter"
+                                    type="button"
+                                    data-quote-filter="{{ tag.name|default:tag }}">
+                                #{{ tag.name|default:tag }}
+                            </button>
+                        {% empty %}
+                            <p class="quotes-empty-small">
+                                No tags yet. The taxonomy department has failed again.
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="quotes-sidebar-card">
+                    <h3 class="quotes-sidebar-title">Authors</h3>
+
+                    <div class="quotes-author-list">
+                        {% for author in authors %}
+                            <button class="quotes-author-filter"
+                                    type="button"
+                                    data-quote-filter="{{ author.fullname|default:author }}">
+                                {{ author.fullname|default:author }}
+                            </button>
+                        {% empty %}
+                            <p class="quotes-empty-small">
+                                No authors yet.
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </aside>
+
+            <section class="quotes-grid" data-quotes-grid>
+                {% for quote in quotes %}
+                    <article class="quote-card"
+                             data-quote-card
+                             data-search-text="{{ quote.quote }} {{ quote.author }} {% for tag in quote.tags.all %} {{ tag }} {% endfor %}">
+                        <div class="quote-card-mark">“</div>
+
+                        <blockquote class="quote-card-text">
+                            {{ quote.quote }}
+                        </blockquote>
+
+                        <div class="quote-card-footer">
+                            <p class="quote-card-author">
+                                {{ quote.author }}
+                            </p>
+
+                            <div class="quote-card-tags">
+                                {% for tag in quote.tags.all %}
+                                    <span class="quote-card-tag">
+                                        #{{ tag }}
+                                    </span>
+                                {% empty %}
+                                    <span class="quote-card-tag quote-card-tag-muted">
+                                        no tags
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </article>
+                {% empty %}
+                    <div class="quotes-empty-state">
+                        <div class="quotes-empty-icon">∅</div>
+                        <h3>No quotes yet</h3>
+                        <p>
+                            The collection is empty. Humanity has briefly stopped quoting itself. Suspicious.
+                        </p>
+
+                        {% if user.is_authenticated %}
+                            <a class="quotes-empty-action" href="{% url 'quotes:add_quote' %}">
+                                Add first quote
+                            </a>
+                        {% else %}
+                            <a class="quotes-empty-action" href="{% url 'users:login' %}">
+                                Sign in to add quotes
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </section>
+
+        </div>
+
+        <div class="quotes-no-results" data-quotes-no-results hidden>
+            <div class="quotes-empty-icon">?</div>
+            <h3>No matches</h3>
+            <p>
+                Nothing found. Either the search is too clever, or the quotes are hiding from responsibility.
+            </p>
+        </div>
+
+    </div>
 {% endblock %}
