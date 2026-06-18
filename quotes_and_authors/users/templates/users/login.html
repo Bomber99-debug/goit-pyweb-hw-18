@@ -4,47 +4,121 @@
     <title>Login</title>
 {% endblock %}
 
-{% block content %}
-    <div class="contaniner mt-3">
-        <h2>Login User</h2>
+{% block description %}
+    <meta name="description" content="Log in to the quotes and authors collection.">
+{% endblock %}
 
-        {% if form.errors and form.non_field_errors %}
-            <div class="alert alert-danger" role="alert">
-                {{ form.non_field_errors }}
+{% block content %}
+    <div class="login-page">
+
+        <section class="login-header">
+            <div>
+                <p class="login-kicker">Account</p>
+                <h2 class="login-title">Log in</h2>
+                <p class="login-subtitle">
+                    Sign in to add quotes, authors, tags, and import data.
+                    The gatekeeping ritual continues, now with cleaner HTML.
+                </p>
             </div>
+
+            <a class="login-back" href="{% url 'quotes:home' %}">
+                Back to quotes
+            </a>
+        </section>
+
+        <div class="login-layout">
+
+            <form class="login-form" method="post" novalidate data-login-form>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="login-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="login-field">
+                    <label for="{{ form.username.id_for_label }}" class="login-label">
+                        Username
+                    </label>
+
+                    <div class="login-control login-username-field">
+                        {{ form.username }}
+                    </div>
+
+                    {% if form.errors.username %}
+                        <div class="login-field-errors">
+                            {{ form.errors.username }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="login-field">
+                    <label for="{{ form.password.id_for_label }}" class="login-label">
+                        Password
+                    </label>
+
+                    <div class="login-control login-password-field">
+                        {{ form.password }}
+                    </div>
+
+                    {% if form.errors.password %}
+                        <div class="login-field-errors">
+                            {{ form.errors.password }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="login-actions">
+                    <button type="submit" class="login-submit" data-login-submit>
+                        Log in
+                    </button>
+
+                    <button type="reset" class="login-reset">
+                        Reset
+                    </button>
+                </div>
+
+                <p class="login-register-note">
+                    No account yet?
+                    <a href="{% url 'users:register' %}">Create one</a>
+                </p>
+            </form>
+
+            <aside class="login-panel">
+                <div class="login-preview-card">
+                    <p class="login-preview-label">Session preview</p>
+
+                    <div class="login-avatar" data-login-avatar>
+                        U
+                    </div>
+
+                    <h3 class="login-preview-name" data-login-preview-name>
+                        username
+                    </h3>
+
+                    <p class="login-preview-text">
+                        After login, the create and import tools become available.
+                    </p>
+                </div>
+
+                <div class="login-note">
+                    <strong>Reminder:</strong>
+                    do not commit passwords, tokens, or database secrets. Git remembers better than most humans, sadly.
+                </div>
+            </aside>
+
+        </div>
+
+        {% if messages %}
+            <section class="login-messages" aria-live="polite">
+                {% for message in messages %}
+                    <div class="login-message login-message-{{ message.tags|default:'info' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </section>
         {% endif %}
 
-        <form method="post">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label class="form-label">User namer
-                    {{ form.username }}
-                </label>
-                <span>{{ form.errors.username }}</span>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Password
-                    {{ form.password }}
-                </label>
-                <span>{{ form.errors.password }}</span>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="reset" class="btn btn-secondary">reset</button>
-        </form>
     </div>
-    {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-                <div>
-                    <span
-                            {% if message.tags %}
-                                class="alert alert-{{ message.tags }}"
-                            {% endif %}>
-                        {{ message }}
-                    </span>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
 {% endblock %}

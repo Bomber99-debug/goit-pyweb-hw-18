@@ -571,3 +571,50 @@
     updatePreview();
     updatePasswordStatus();
 })();
+(() => {
+    const form = document.querySelector("[data-login-form]");
+
+    if (!form) {
+        return;
+    }
+
+    const usernameInput = form.querySelector(".login-username-field input");
+    const passwordInput = form.querySelector(".login-password-field input");
+    const previewAvatar = document.querySelector("[data-login-avatar]");
+    const previewName = document.querySelector("[data-login-preview-name]");
+    const submitButton = document.querySelector("[data-login-submit]");
+
+    if (passwordInput) {
+        passwordInput.setAttribute("autocomplete", "current-password");
+    }
+
+    const updatePreview = () => {
+        const username = usernameInput ? usernameInput.value.trim() : "";
+
+        if (previewAvatar) {
+            previewAvatar.textContent = username ? username[0] : "U";
+        }
+
+        if (previewName) {
+            previewName.textContent = username || "username";
+        }
+    };
+
+    if (usernameInput) {
+        usernameInput.addEventListener("input", updatePreview);
+        usernameInput.addEventListener("change", updatePreview);
+    }
+
+    form.addEventListener("reset", () => {
+        window.setTimeout(updatePreview, 0);
+    });
+
+    form.addEventListener("submit", () => {
+        if (submitButton) {
+            submitButton.classList.add("is-submitting");
+            submitButton.textContent = "Logging in...";
+        }
+    });
+
+    updatePreview();
+})();
