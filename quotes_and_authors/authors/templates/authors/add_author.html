@@ -4,36 +4,151 @@
     <title>Add author</title>
 {% endblock %}
 
+{% block description %}
+    <meta name="description" content="Add a new author with biographical details.">
+{% endblock %}
+
 {% block content %}
-    {% csrf_token %}
-    <form class="row g-3" method="POST">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="{{ form.fullname.id_for_label }}"></label>
+    <div class="add-author-page">
 
-            {{ form.fullname }}
-            {{ form.fullname.errors }}
-        </div>
-        <div class="mb-3">
-            <label for="{{ form.born_date.id_for_label }}"></label>
+        <section class="add-author-header">
+            <div>
+                <p class="add-author-kicker">Create</p>
+                <h2 class="add-author-title">Add a new author</h2>
+                <p class="add-author-subtitle">
+                    Add the person behind the quote: name, birth date, location, and a short biography.
+                    Civilization survives another form.
+                </p>
+            </div>
 
-            {{ form.born_date }}
-            {{ form.born_date.errors }}
-        </div>
-        <div class="mb-3">
-            <label for="{{ form.born_location.id_for_label }}"></label>
+            <a class="add-author-back" href="{% url 'authors:authors' %}">
+                Back to authors
+            </a>
+        </section>
 
-            {{ form.born_location }}
-            {{ form.born_location.errors }}
-        </div>
-        <div class="mb-3">
-            <label for="{{ form.description.id_for_label }}"></label>
+        <div class="add-author-layout">
 
-            {{ form.description }}
-            {{ form.description.errors }}
+            <form class="add-author-form" method="POST" novalidate data-add-author-form>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="add-author-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="add-author-field">
+                    <label for="{{ form.fullname.id_for_label }}" class="add-author-label">
+                        Full name
+                    </label>
+
+                    <div class="add-author-control add-author-name-field">
+                        {{ form.fullname }}
+                    </div>
+
+                    {% if form.fullname.errors %}
+                        <div class="add-author-field-errors">
+                            {{ form.fullname.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="add-author-row">
+                    <div class="add-author-field">
+                        <label for="{{ form.born_date.id_for_label }}" class="add-author-label">
+                            Birth date
+                        </label>
+
+                        <div class="add-author-control add-author-date-field">
+                            {{ form.born_date }}
+                        </div>
+
+                        {% if form.born_date.errors %}
+                            <div class="add-author-field-errors">
+                                {{ form.born_date.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="add-author-field">
+                        <label for="{{ form.born_location.id_for_label }}" class="add-author-label">
+                            Birth location
+                        </label>
+
+                        <div class="add-author-control add-author-location-field">
+                            {{ form.born_location }}
+                        </div>
+
+                        {% if form.born_location.errors %}
+                            <div class="add-author-field-errors">
+                                {{ form.born_location.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="add-author-field">
+                    <div class="add-author-label-row">
+                        <label for="{{ form.description.id_for_label }}" class="add-author-label">
+                            Biography
+                        </label>
+
+                        <span class="add-author-counter" data-author-bio-counter>
+                            0 characters
+                        </span>
+                    </div>
+
+                    <div class="add-author-control add-author-description-field">
+                        {{ form.description }}
+                    </div>
+
+                    {% if form.description.errors %}
+                        <div class="add-author-field-errors">
+                            {{ form.description.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="add-author-actions">
+                    <button class="add-author-submit" type="submit" data-add-author-submit>
+                        Save author
+                    </button>
+
+                    <a class="add-author-cancel" href="{% url 'authors:authors' %}">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+
+            <aside class="add-author-preview">
+                <div class="add-author-preview-card">
+                    <p class="add-author-preview-label">Live preview</p>
+
+                    <div class="add-author-preview-avatar" data-author-preview-avatar>
+                        A
+                    </div>
+
+                    <h3 class="add-author-preview-name" data-author-preview-name>
+                        Author name
+                    </h3>
+
+                    <div class="add-author-preview-meta">
+                        <span data-author-preview-date>Birth date</span>
+                        <span data-author-preview-location>Birth location</span>
+                    </div>
+
+                    <p class="add-author-preview-bio" data-author-preview-bio>
+                        Biography preview will appear here.
+                    </p>
+                </div>
+
+                <div class="add-author-note">
+                    <strong>Small mercy:</strong>
+                    write enough biography to be useful, not enough to become a separate course.
+                </div>
+            </aside>
+
         </div>
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary mb-3">Confirm identity</button>
-        </div>
-    </form>
+
+    </div>
 {% endblock %}

@@ -263,3 +263,75 @@
 
     applyFilter("");
 })();
+(() => {
+    const form = document.querySelector("[data-add-author-form]");
+
+    if (!form) {
+        return;
+    }
+
+    const nameInput = form.querySelector(".add-author-name-field input");
+    const dateInput = form.querySelector(".add-author-date-field input");
+    const locationInput = form.querySelector(".add-author-location-field input");
+    const bioInput = form.querySelector(".add-author-description-field textarea");
+    const bioCounter = document.querySelector("[data-author-bio-counter]");
+    const previewAvatar = document.querySelector("[data-author-preview-avatar]");
+    const previewName = document.querySelector("[data-author-preview-name]");
+    const previewDate = document.querySelector("[data-author-preview-date]");
+    const previewLocation = document.querySelector("[data-author-preview-location]");
+    const previewBio = document.querySelector("[data-author-preview-bio]");
+    const submitButton = document.querySelector("[data-add-author-submit]");
+
+    const emptyName = "Author name";
+    const emptyDate = "Birth date";
+    const emptyLocation = "Birth location";
+    const emptyBio = "Biography preview will appear here.";
+
+    const updatePreview = () => {
+        const name = nameInput ? nameInput.value.trim() : "";
+        const date = dateInput ? dateInput.value.trim() : "";
+        const location = locationInput ? locationInput.value.trim() : "";
+        const bio = bioInput ? bioInput.value.trim() : "";
+
+        if (previewAvatar) {
+            previewAvatar.textContent = name ? name[0] : "A";
+        }
+
+        if (previewName) {
+            previewName.textContent = name || emptyName;
+        }
+
+        if (previewDate) {
+            previewDate.textContent = date || emptyDate;
+        }
+
+        if (previewLocation) {
+            previewLocation.textContent = location || emptyLocation;
+        }
+
+        if (previewBio) {
+            previewBio.textContent = bio || emptyBio;
+        }
+
+        if (bioCounter) {
+            const length = bioInput ? bioInput.value.length : 0;
+            bioCounter.textContent = `${length} characters`;
+        }
+    };
+
+    [nameInput, dateInput, locationInput, bioInput].forEach((input) => {
+        if (input) {
+            input.addEventListener("input", updatePreview);
+            input.addEventListener("change", updatePreview);
+        }
+    });
+
+    form.addEventListener("submit", () => {
+        if (submitButton) {
+            submitButton.classList.add("is-submitting");
+            submitButton.textContent = "Saving...";
+        }
+    });
+
+    updatePreview();
+})();
