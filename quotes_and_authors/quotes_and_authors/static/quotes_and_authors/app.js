@@ -480,3 +480,94 @@
         }
     });
 })();
+(() => {
+    const form = document.querySelector("[data-register-form]");
+
+    if (!form) {
+        return;
+    }
+
+    const usernameInput = form.querySelector(".register-username-field input");
+    const emailInput = form.querySelector(".register-email-field input");
+    const passwordInput = form.querySelector(".register-password-field input");
+    const passwordRepeatInput = form.querySelector(".register-password-repeat-field input");
+    const passwordStatus = document.querySelector("[data-register-password-status]");
+    const previewAvatar = document.querySelector("[data-register-avatar]");
+    const previewName = document.querySelector("[data-register-preview-name]");
+    const previewEmail = document.querySelector("[data-register-preview-email]");
+    const submitButton = document.querySelector("[data-register-submit]");
+
+    const updatePreview = () => {
+        const username = usernameInput ? usernameInput.value.trim() : "";
+        const email = emailInput ? emailInput.value.trim() : "";
+
+        if (previewAvatar) {
+            previewAvatar.textContent = username ? username[0] : "U";
+        }
+
+        if (previewName) {
+            previewName.textContent = username || "username";
+        }
+
+        if (previewEmail) {
+            previewEmail.textContent = email || "email@example.com";
+        }
+    };
+
+    const updatePasswordStatus = () => {
+        if (!passwordStatus || !passwordInput || !passwordRepeatInput) {
+            return;
+        }
+
+        const password = passwordInput.value;
+        const repeat = passwordRepeatInput.value;
+
+        if (!password && !repeat) {
+            passwordStatus.hidden = true;
+            passwordStatus.classList.remove("is-ok");
+            return;
+        }
+
+        passwordStatus.hidden = false;
+
+        if (password && repeat && password === repeat) {
+            passwordStatus.classList.add("is-ok");
+            passwordStatus.textContent = "Passwords match.";
+            return;
+        }
+
+        passwordStatus.classList.remove("is-ok");
+        passwordStatus.textContent = "Passwords do not match yet.";
+    };
+
+    [usernameInput, emailInput].forEach((input) => {
+        if (input) {
+            input.addEventListener("input", updatePreview);
+            input.addEventListener("change", updatePreview);
+        }
+    });
+
+    [passwordInput, passwordRepeatInput].forEach((input) => {
+        if (input) {
+            input.addEventListener("input", updatePasswordStatus);
+            input.addEventListener("change", updatePasswordStatus);
+        }
+    });
+
+    form.addEventListener("reset", () => {
+        window.setTimeout(() => {
+            updatePreview();
+            updatePasswordStatus();
+        }, 0);
+    });
+
+    form.addEventListener("submit", () => {
+        if (submitButton) {
+            submitButton.classList.add("is-submitting");
+            submitButton.textContent = "Creating...";
+        }
+    });
+
+    updatePreview();
+    updatePasswordStatus();
+})();

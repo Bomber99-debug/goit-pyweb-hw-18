@@ -4,43 +4,149 @@
     <title>Register</title>
 {% endblock %}
 
+{% block description %}
+    <meta name="description" content="Create a new account for the quotes and authors collection.">
+{% endblock %}
+
 {% block content %}
-    <div class="contaniner mt-3">
-        <h2>Register User</h2>
-        <form method="post">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label class="form-label">User namer
-                    {{ form.username }}
-                </label>
-                <span>{{ form.errors.username }}</span>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Eamil
-                    {{ form.email }}
-                </label>
-                <span>{{ form.errors.email }}</span>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Password
-                    {{ form.password1 }}
-                </label>
-                <span>{{ form.errors.password1 }}</span>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Repeat Password
-                    {{ form.password2 }}
-                </label>
-                <span>{{ form.errors.password2 }}</span>
+    <div class="register-page">
+
+        <section class="register-header">
+            <div>
+                <p class="register-kicker">Account</p>
+                <h2 class="register-title">Create an account</h2>
+                <p class="register-subtitle">
+                    Register to add authors, quotes, tags, and import external data.
+                    A login form, because anonymous chaos was apparently not enough.
+                </p>
             </div>
 
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="reset" class="btn btn-secondary">reset</button>
-        </form>
-        {% if form.errors and form.non_field_errors %}
-            <div class="alert alert-danger" role="alert">
-                {{ form.non_field_errors }}
-            </div>
-        {% endif %}
+            <a class="register-back" href="{% url 'quotes:home' %}">
+                Back to quotes
+            </a>
+        </section>
+
+        <div class="register-layout">
+
+            <form class="register-form" method="post" novalidate data-register-form>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="register-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="register-field">
+                    <label for="{{ form.username.id_for_label }}" class="register-label">
+                        Username
+                    </label>
+
+                    <div class="register-control register-username-field">
+                        {{ form.username }}
+                    </div>
+
+                    {% if form.errors.username %}
+                        <div class="register-field-errors">
+                            {{ form.errors.username }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="register-field">
+                    <label for="{{ form.email.id_for_label }}" class="register-label">
+                        Email
+                    </label>
+
+                    <div class="register-control register-email-field">
+                        {{ form.email }}
+                    </div>
+
+                    {% if form.errors.email %}
+                        <div class="register-field-errors">
+                            {{ form.errors.email }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="register-row">
+                    <div class="register-field">
+                        <label for="{{ form.password1.id_for_label }}" class="register-label">
+                            Password
+                        </label>
+
+                        <div class="register-control register-password-field">
+                            {{ form.password1 }}
+                        </div>
+
+                        {% if form.errors.password1 %}
+                            <div class="register-field-errors">
+                                {{ form.errors.password1 }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="register-field">
+                        <label for="{{ form.password2.id_for_label }}" class="register-label">
+                            Repeat password
+                        </label>
+
+                        <div class="register-control register-password-repeat-field">
+                            {{ form.password2 }}
+                        </div>
+
+                        {% if form.errors.password2 %}
+                            <div class="register-field-errors">
+                                {{ form.errors.password2 }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="register-password-status" data-register-password-status hidden>
+                    Passwords do not match yet.
+                </div>
+
+                <div class="register-actions">
+                    <button type="submit" class="register-submit" data-register-submit>
+                        Create account
+                    </button>
+
+                    <button type="reset" class="register-reset">
+                        Reset
+                    </button>
+                </div>
+
+                <p class="register-login-note">
+                    Already have an account?
+                    <a href="{% url 'users:login' %}">Log in</a>
+                </p>
+            </form>
+
+            <aside class="register-panel">
+                <div class="register-preview-card">
+                    <p class="register-preview-label">Profile preview</p>
+
+                    <div class="register-avatar" data-register-avatar>
+                        U
+                    </div>
+
+                    <h3 class="register-preview-name" data-register-preview-name>
+                        username
+                    </h3>
+
+                    <p class="register-preview-email" data-register-preview-email>
+                        email@example.com
+                    </p>
+                </div>
+
+                <div class="register-note">
+                    <strong>Useful habit:</strong>
+                    use a password manager. Humans invent passwords like raccoons invent tax policy.
+                </div>
+            </aside>
+
+        </div>
+
     </div>
 {% endblock %}
