@@ -850,3 +850,364 @@ a {
         min-height: auto;
     }
 }
+.add-quote-page {
+    display: grid;
+    gap: 1.35rem;
+}
+
+.add-quote-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--qa-line);
+}
+
+.add-quote-kicker {
+    margin: 0 0 0.35rem;
+    color: var(--qa-accent-dark);
+    font-size: 0.78rem;
+    font-weight: 850;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.add-quote-title {
+    margin: 0;
+    color: #111827;
+    font-size: clamp(1.8rem, 3vw, 3rem);
+    line-height: 1;
+    letter-spacing: -0.06em;
+}
+
+.add-quote-subtitle {
+    max-width: 42rem;
+    margin: 0.65rem 0 0;
+    color: var(--qa-muted);
+}
+
+.add-quote-back,
+.add-quote-cancel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-weight: 800;
+    transition:
+        transform 160ms ease,
+        background-color 160ms ease,
+        color 160ms ease;
+}
+
+.add-quote-back {
+    flex: 0 0 auto;
+    padding: 0.75rem 1rem;
+    color: #334155;
+    border: 1px solid var(--qa-line);
+    background: rgba(255, 255, 255, 0.74);
+}
+
+.add-quote-back:hover,
+.add-quote-cancel:hover {
+    color: var(--qa-accent-dark);
+    background: var(--qa-accent-soft);
+    transform: translateY(-1px);
+}
+
+.add-quote-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
+    gap: 1.25rem;
+    align-items: start;
+}
+
+.add-quote-form,
+.add-quote-preview-card,
+.add-quote-note {
+    border: 1px solid var(--qa-line);
+    border-radius: var(--qa-radius-lg);
+    background: rgba(255, 255, 255, 0.76);
+    box-shadow: var(--qa-shadow-soft);
+}
+
+.add-quote-form {
+    display: grid;
+    gap: 1.1rem;
+    padding: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.add-quote-field {
+    display: grid;
+    gap: 0.55rem;
+}
+
+.add-quote-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.add-quote-label {
+    color: #334155;
+    font-size: 0.9rem;
+    font-weight: 850;
+}
+
+.add-quote-counter {
+    color: var(--qa-muted);
+    font-size: 0.8rem;
+    font-weight: 750;
+}
+
+.add-quote-control textarea,
+.add-quote-control select,
+.add-quote-control input {
+    width: 100%;
+    border: 1px solid var(--qa-line);
+    border-radius: var(--qa-radius-md);
+    outline: none;
+    color: var(--qa-text);
+    background: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
+    font: inherit;
+    font-weight: 650;
+}
+
+.add-quote-control textarea {
+    min-height: 12rem;
+    resize: vertical;
+    padding: 1rem;
+    line-height: 1.55;
+}
+
+.add-quote-control select,
+.add-quote-control input {
+    padding: 0.85rem 1rem;
+}
+
+.add-quote-control textarea:focus,
+.add-quote-control select:focus,
+.add-quote-control input:focus {
+    border-color: rgba(124, 58, 237, 0.36);
+    box-shadow: 0 0 0 0.22rem var(--qa-accent-soft);
+}
+
+.add-quote-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.add-quote-tag-option {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--qa-line);
+    border-radius: 999px;
+    color: #475569;
+    background: rgba(255, 255, 255, 0.78);
+    cursor: pointer;
+    font-size: 0.86rem;
+    font-weight: 800;
+    transition:
+        transform 160ms ease,
+        border-color 160ms ease,
+        background-color 160ms ease,
+        color 160ms ease;
+}
+
+.add-quote-tag-option:hover {
+    color: var(--qa-accent-dark);
+    border-color: rgba(124, 58, 237, 0.25);
+    background: var(--qa-accent-soft);
+    transform: translateY(-1px);
+}
+
+.add-quote-tag-option input {
+    width: 0.95rem;
+    height: 0.95rem;
+    accent-color: var(--qa-accent);
+}
+
+.add-quote-field-errors,
+.add-quote-errors {
+    padding: 0.75rem 0.85rem;
+    border: 1px solid rgba(220, 38, 38, 0.22);
+    border-radius: var(--qa-radius-md);
+    color: #991b1b;
+    background: rgba(254, 226, 226, 0.78);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.add-quote-field-errors ul,
+.add-quote-errors ul {
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+.add-quote-empty-tags {
+    margin: 0;
+    color: var(--qa-muted);
+}
+
+.add-quote-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-top: 0.5rem;
+}
+
+.add-quote-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.9rem;
+    padding: 0.85rem 1.15rem;
+    border: 1px solid var(--qa-accent);
+    border-radius: 999px;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--qa-accent), #2563eb);
+    box-shadow: 0 14px 30px rgba(124, 58, 237, 0.24);
+    font: inherit;
+    font-weight: 850;
+    transition:
+        transform 160ms ease,
+        box-shadow 160ms ease;
+}
+
+.add-quote-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 38px rgba(124, 58, 237, 0.32);
+}
+
+.add-quote-submit.is-submitting {
+    opacity: 0.76;
+    pointer-events: none;
+}
+
+.add-quote-cancel {
+    padding: 0.85rem 1rem;
+    color: #334155;
+}
+
+.add-quote-preview {
+    position: sticky;
+    top: 6.25rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.add-quote-preview-card {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    gap: 1rem;
+    min-height: 22rem;
+    padding: 1.35rem;
+}
+
+.add-quote-preview-label {
+    margin: 0;
+    color: var(--qa-accent-dark);
+    font-size: 0.78rem;
+    font-weight: 850;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.add-quote-preview-mark {
+    position: absolute;
+    top: -1.1rem;
+    right: 1rem;
+    color: rgba(124, 58, 237, 0.13);
+    font-family: Georgia, serif;
+    font-size: 7.5rem;
+    line-height: 1;
+    pointer-events: none;
+}
+
+.add-quote-preview-text {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    color: #111827;
+    font-size: clamp(1.15rem, 1.8vw, 1.65rem);
+    line-height: 1.42;
+    letter-spacing: -0.04em;
+    font-weight: 800;
+}
+
+.add-quote-preview-author {
+    position: relative;
+    z-index: 1;
+    margin: auto 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
+    color: var(--qa-accent-dark);
+    font-weight: 850;
+}
+
+.add-quote-preview-author::before {
+    content: "— ";
+    color: var(--qa-muted);
+}
+
+.add-quote-preview-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.add-quote-preview-tags span {
+    display: inline-flex;
+    padding: 0.35rem 0.55rem;
+    border-radius: 999px;
+    color: #475569;
+    background: rgba(124, 58, 237, 0.10);
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.add-quote-note {
+    padding: 1rem;
+    color: #475569;
+    font-size: 0.92rem;
+}
+
+.add-quote-note strong {
+    color: #111827;
+}
+
+@media (max-width: 991.98px) {
+    .add-quote-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .add-quote-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .add-quote-preview {
+        position: static;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .add-quote-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .add-quote-submit,
+    .add-quote-cancel,
+    .add-quote-back {
+        width: 100%;
+    }
+}

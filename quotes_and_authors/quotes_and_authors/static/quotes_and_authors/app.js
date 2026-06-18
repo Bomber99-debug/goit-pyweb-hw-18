@@ -77,3 +77,112 @@
         });
     });
 })();
+(() => {
+    const form = document.querySelector("[data-add-quote-form]");
+
+    if (!form) {
+        return;
+    }
+
+    const quoteInput = form.querySelector("textarea");
+    const authorField = form.querySelector(".add-quote-author-field select");
+    const tagInputs = Array.from(form.querySelectorAll(".add-quote-tags input[type='checkbox']"));
+    const counter = document.querySelector("[data-quote-counter]");
+    const tagsCounter = document.querySelector("[data-tags-counter]");
+    const previewText = document.querySelector("[data-quote-preview-text]");
+    const previewAuthor = document.querySelector("[data-quote-preview-author]");
+    const previewTags = document.querySelector("[data-quote-preview-tags]");
+    const submitButton = document.querySelector("[data-add-quote-submit]");
+
+    const emptyQuoteText = "Your quote will appear here.";
+    const emptyAuthorText = "Select an author";
+    const emptyTagsText = "No tags selected";
+
+    const getSelectedAuthorText = () => {
+        if (!authorField || !authorField.selectedOptions.length) {
+            return emptyAuthorText;
+        }
+
+        const authorText = authorField.selectedOptions[0].textContent.trim();
+
+        return authorText || emptyAuthorText;
+    };
+
+    const getSelectedTags = () => {
+        return tagInputs
+            .filter((input) => input.checked)
+            .map((input) => {
+                const label = input.closest("label");
+                const labelText = label ? label.textContent.trim() : "";
+
+                return labelText.replace(/\s+/g, " ");
+            })
+            .filter(Boolean);
+    };
+
+    const renderPreviewTags = (tags) => {
+        if (!previewTags) {
+            return;
+        }
+
+        previewTags.innerHTML = "";
+
+        if (tags.length === 0) {
+            const emptyTag = document.createElement("span");
+            emptyTag.textContent = emptyTagsText;
+            previewTags.append(emptyTag);
+            return;
+        }
+
+        tags.forEach((tag) => {
+            const tagElement = document.createElement("span");
+            tagElement.textContent = `#${tag}`;
+            previewTags.append(tagElement);
+        });
+    };
+
+    const updatePreview = () => {
+        const quoteValue = quoteInput ? quoteInput.value.trim() : "";
+        const selectedTags = getSelectedTags();
+
+        if (counter) {
+            const quoteLength = quoteInput ? quoteInput.value.length : 0;
+            counter.textContent = `${quoteLength} characters`;
+        }
+
+        if (tagsCounter) {
+            tagsCounter.textContent = `${selectedTags.length} selected`;
+        }
+
+        if (previewText) {
+            previewText.textContent = quoteValue || emptyQuoteText;
+        }
+
+        if (previewAuthor) {
+            previewAuthor.textContent = getSelectedAuthorText();
+        }
+
+        renderPreviewTags(selectedTags);
+    };
+
+    if (quoteInput) {
+        quoteInput.addEventListener("input", updatePreview);
+    }
+
+    if (authorField) {
+        authorField.addEventListener("change", updatePreview);
+    }
+
+    tagInputs.forEach((input) => {
+        input.addEventListener("change", updatePreview);
+    });
+
+    form.addEventListener("submit", () => {
+        if (submitButton) {
+            submitButton.classList.add("is-submitting");
+            submitButton.textContent = "Saving...";
+        }
+    });
+
+    updatePreview();
+})();

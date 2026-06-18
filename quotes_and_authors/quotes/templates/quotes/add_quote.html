@@ -4,31 +4,142 @@
     <title>Add quote</title>
 {% endblock %}
 
+{% block description %}
+    <meta name="description" content="Add a new quote with author and tags.">
+{% endblock %}
+
 {% block content %}
-    <form class="row g-3 needs-validation" novalidate method="POST">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="{{ form.quote.id_for_label }}" class="form-label">Quote</label>
-            {{ form.quote }}
-            <div class="invalid-feedback">
-                Please enter a message in the textarea.
-            </div>
-        </div>
-        <div class="mb-3">
-            {{ form.author }}
-        </div>
+    <div class="add-quote-page">
 
-        {% for checkbox in form.tags %}
-            <div class="form-check form-switch">
-                {{ checkbox.tag }}
-                <label class="form-check-label" for="{{ checkbox.id_for_label }}">
-                    {{ checkbox.choice_label }}
-                </label>
+        <section class="add-quote-header">
+            <div>
+                <p class="add-quote-kicker">Create</p>
+                <h2 class="add-quote-title">Add a new quote</h2>
+                <p class="add-quote-subtitle">
+                    Save the quote, connect it with an author, and attach tags so future-you can pretend this was organized from the start.
+                </p>
             </div>
 
-        {% endfor %}
-        <div class="col-12">
-            <button class="btn btn-primary" type="submit">Submit form</button>
+            <a class="add-quote-back" href="{% url 'quotes:home' %}">
+                Back to quotes
+            </a>
+        </section>
+
+        <div class="add-quote-layout">
+
+            <form class="add-quote-form" method="POST" novalidate data-add-quote-form>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="add-quote-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="add-quote-field add-quote-field-main">
+                    <div class="add-quote-label-row">
+                        <label for="{{ form.quote.id_for_label }}" class="add-quote-label">
+                            Quote text
+                        </label>
+
+                        <span class="add-quote-counter" data-quote-counter>
+                            0 characters
+                        </span>
+                    </div>
+
+                    <div class="add-quote-control add-quote-textarea-wrap">
+                        {{ form.quote }}
+                    </div>
+
+                    {% if form.quote.errors %}
+                        <div class="add-quote-field-errors">
+                            {{ form.quote.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="add-quote-field">
+                    <label for="{{ form.author.id_for_label }}" class="add-quote-label">
+                        Author
+                    </label>
+
+                    <div class="add-quote-control add-quote-author-field">
+                        {{ form.author }}
+                    </div>
+
+                    {% if form.author.errors %}
+                        <div class="add-quote-field-errors">
+                            {{ form.author.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="add-quote-field">
+                    <div class="add-quote-label-row">
+                        <span class="add-quote-label">Tags</span>
+
+                        <span class="add-quote-counter" data-tags-counter>
+                            0 selected
+                        </span>
+                    </div>
+
+                    <div class="add-quote-tags">
+                        {% for checkbox in form.tags %}
+                            <label class="add-quote-tag-option">
+                                {{ checkbox.tag }}
+                                <span>{{ checkbox.choice_label }}</span>
+                            </label>
+                        {% empty %}
+                            <p class="add-quote-empty-tags">
+                                No tags yet. The tag factory is currently unemployed.
+                            </p>
+                        {% endfor %}
+                    </div>
+
+                    {% if form.tags.errors %}
+                        <div class="add-quote-field-errors">
+                            {{ form.tags.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="add-quote-actions">
+                    <button class="add-quote-submit" type="submit" data-add-quote-submit>
+                        Save quote
+                    </button>
+
+                    <a class="add-quote-cancel" href="{% url 'quotes:home' %}">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+
+            <aside class="add-quote-preview">
+                <div class="add-quote-preview-card">
+                    <p class="add-quote-preview-label">Live preview</p>
+
+                    <div class="add-quote-preview-mark">“</div>
+
+                    <blockquote class="add-quote-preview-text" data-quote-preview-text>
+                        Your quote will appear here.
+                    </blockquote>
+
+                    <p class="add-quote-preview-author" data-quote-preview-author>
+                        Select an author
+                    </p>
+
+                    <div class="add-quote-preview-tags" data-quote-preview-tags>
+                        <span>No tags selected</span>
+                    </div>
+                </div>
+
+                <div class="add-quote-note">
+                    <strong>Tiny rule:</strong>
+                    save one good quote, not a full philosophy lecture. Browsers are tired too.
+                </div>
+            </aside>
+
         </div>
-    </form>
+
+    </div>
 {% endblock %}
