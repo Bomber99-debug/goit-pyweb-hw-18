@@ -429,3 +429,24 @@
 
     updatePreview();
 })();
+(() => {
+    const importLink = document.querySelector("[data-mongo-import-link]");
+
+    if (!importLink) {
+        return;
+    }
+
+    importLink.addEventListener("click", (event) => {
+        const confirmed = window.confirm(
+            "Start MongoDB import? This may create records in your local database."
+        );
+
+        if (!confirmed) {
+            event.preventDefault();
+            return;
+        }
+
+        importLink.classList.add("is-loading");
+        importLink.textContent = "Importing...";
+    });
+})();

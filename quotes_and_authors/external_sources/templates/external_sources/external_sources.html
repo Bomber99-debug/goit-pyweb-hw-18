@@ -1,14 +1,77 @@
 {% extends 'quotes_and_authors/base.html' %}
-{% load static %}
 
 {% block title %}
-    <title>Author</title>
+    <title>External sources</title>
 {% endblock %}
 
-{% block styles %}
-    <link rel="stylesheet" href="{% static 'external_sources/style.css' %}">
+{% block description %}
+    <meta name="description" content="Import quotes and authors from external sources.">
 {% endblock %}
 
 {% block content %}
-   <a class="nav-link active" href="{% url 'external_sources:mongo_import' %}">MongoDB Import</a>
+    <div class="external-page">
+
+        <section class="external-header">
+            <div>
+                <p class="external-kicker">Data import</p>
+                <h2 class="external-title">External sources</h2>
+                <p class="external-subtitle">
+                    Import authors, quotes, and tags from MongoDB into the local collection.
+                    Because moving data from one database to another is apparently how civilization relaxes.
+                </p>
+            </div>
+
+            <a class="external-back" href="{% url 'quotes:home' %}">
+                Back to quotes
+            </a>
+        </section>
+
+        <div class="external-layout">
+
+            <section class="external-card">
+                <div class="external-icon">DB</div>
+
+                <div class="external-card-body">
+                    <p class="external-card-kicker">MongoDB</p>
+
+                    <h3 class="external-card-title">
+                        Import MongoDB data
+                    </h3>
+
+                    <p class="external-card-text">
+                        This action starts the MongoDB import process configured in the project.
+                        Use it only when your external source is ready and credentials are configured locally.
+                    </p>
+
+                    <div class="external-actions">
+                        <a class="external-import-btn"
+                           href="{% url 'external_sources:mongo_import' %}"
+                           data-mongo-import-link>
+                            Start import
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="external-info">
+                <div class="external-info-card">
+                    <h3>Before import</h3>
+
+                    <ul class="external-checklist">
+                        <li>MongoDB credentials exist locally.</li>
+                        <li>External authors are available.</li>
+                        <li>External quotes are available.</li>
+                        <li>You are signed in.</li>
+                    </ul>
+                </div>
+
+                <div class="external-warning">
+                    <strong>Careful:</strong>
+                    this button may create records. Click like an adult, not like a raccoon on a touchscreen.
+                </div>
+            </aside>
+
+        </div>
+
+    </div>
 {% endblock %}
