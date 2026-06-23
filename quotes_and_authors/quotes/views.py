@@ -14,12 +14,9 @@ def index(request):
 	authors = Author.objects.all()
 	tags = Tag.objects.all()
 
-	paginator = Paginator(quotes, 10)
-	print(f'paginator: {paginator}')
-	print(f'paginator: {paginator.num_pages}')
+	paginator = Paginator(quotes, 5)
 	page = request.GET.get('page')
 	quotes = paginator.get_page(page)
-	print(quotes)
 	return render(
 			request,
 			'quotes/index.html',
