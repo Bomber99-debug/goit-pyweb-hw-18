@@ -9,9 +9,6 @@ from .models import Tag
 # Create your views here.
 def tags(request, ):
 	tags = Tag.objects.all()
-	paginator = Paginator(tags, 5)
-	page = request.GET.get('page')
-	tags = paginator.get_page(page)
 	return render(request, 'tags/tags.html', { 'tags': tags })
 
 

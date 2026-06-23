@@ -8,7 +8,7 @@ from .forms import AuthorForm
 # Create your views here.
 def authors(request):
 	authors = Author.objects.all()
-	paginator = Paginator(authors, 5)
+	paginator = Paginator(authors, 18)
 	page = request.GET.get('page')
 	authors = paginator.get_page(page)
 	return render(request, 'authors/authors.html', context={ 'authors': authors })
