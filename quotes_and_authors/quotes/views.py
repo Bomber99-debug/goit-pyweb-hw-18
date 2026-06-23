@@ -1,18 +1,15 @@
 from django.core.paginator import Paginator
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from .forms import QuoteForm
 from .models import Quote
-from authors.models import Author
 from tags.models import Tag
 
 
 # Create your views here.
 def index(request):
 	quotes = Quote.objects.all()
-	authors = Author.objects.all()
-	tags = Tag.objects.all()
 
 	paginator = Paginator(quotes, 5)
 	page = request.GET.get('page')
@@ -24,14 +21,25 @@ def index(request):
 			'quotes/index.html',
 			{
 					'quotes'      : quotes,
-					'authors'     : authors,
-					'tags'        : tags,
 					'top_ten_tags': top_ten_tags,
 					},
 			)
 
+
 def quotes_tags(request, quotes_tag_id):
-	return render(request, 'quotes:quotes_tags.html')
+	tags = get_object_or_404(Tag, id=quotes_tag_id)
+	quotes = tags.quotes.all()
+	top_ten_tags = Tag.objects.annotate(quote_count=Count('quotes')).order_by('-quote_count')[ :10 ]
+	return render(
+			request,
+			'quotes:quotes_tags.html',
+			{
+					'tags'        : tags,
+					'quotes'      : quotes,
+					'top_ten_tags': top_ten_tags,
+					},
+			)
+
 
 @login_required
 def add_quote(request):
