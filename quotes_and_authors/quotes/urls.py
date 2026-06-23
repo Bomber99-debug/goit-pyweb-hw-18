@@ -5,5 +5,6 @@ app_name = 'quotes'
 
 urlpatterns = [
 		path('', views.index, name='home'),
+		path('<int:quotes_tag_id>', views.quotes_tags, name='quotes_tags'),
 		path('quotes/add_quote/', views.add_quote, name='add_quote'),
 		]

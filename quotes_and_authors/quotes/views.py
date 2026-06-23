@@ -8,7 +8,6 @@ from authors.models import Author
 from tags.models import Tag
 
 
-
 # Create your views here.
 def index(request):
 	quotes = Quote.objects.all()
@@ -19,17 +18,20 @@ def index(request):
 	page = request.GET.get('page')
 	quotes = paginator.get_page(page)
 
-	top_ten_tags = Tag.objects.annotate(quote_count=Count('quotes')).order_by('-quote_count')[:10]
+	top_ten_tags = Tag.objects.annotate(quote_count=Count('quotes')).order_by('-quote_count')[ :10 ]
 	return render(
 			request,
 			'quotes/index.html',
 			{
-					'quotes' : quotes,
-					'authors': authors,
-					'tags'   : tags,
-					'top_ten_tags'   : top_ten_tags,
+					'quotes'      : quotes,
+					'authors'     : authors,
+					'tags'        : tags,
+					'top_ten_tags': top_ten_tags,
 					},
 			)
+
+def quotes_tags(request, quotes_tag_id):
+	return render(request, 'quotes:quotes_tags.html')
 
 @login_required
 def add_quote(request):
