@@ -16,10 +16,12 @@
             </div>
         </div>
     {% endfor %}
-            {% if quotes.has_previous %}
-            <a href="qoute.previous_page_nameber">Previos</a>
-        {% endif %}
-        {% if quotes.has_next %}
-            <a href="qoute.next_page_nameber">Next</a>
-        {% endif %}
+    {% if quotes.has_previous %}
+        <a href="?page=1">&laquo;&laquo; first</a>
+        <a href="?page={{ quotes.previous_page_number }}">&laquo;Previous</a>
+    {% endif %}
+    {% if quotes.has_next %}
+        <a href="?page={{ quotes.next_page_number }}">Next&raquo;</a>
+        <a href="?page={{ quotes.paginator.num_pages }}">last &raquo;&raquo;</a>
+    {% endif %}
 {% endblock %}
