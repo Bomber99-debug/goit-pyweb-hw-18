@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
@@ -8,6 +9,9 @@ from .models import Tag
 # Create your views here.
 def tags(request, ):
 	tags = Tag.objects.all()
+	paginator = Paginator(tags, 5)
+	page = request.GET.get('page')
+	tags = paginator.get_page(page)
 	return render(request, 'tags/tags.html', { 'tags': tags })
 
 

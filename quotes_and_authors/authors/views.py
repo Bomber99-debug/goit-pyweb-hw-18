@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Author
@@ -7,6 +8,9 @@ from .forms import AuthorForm
 # Create your views here.
 def authors(request):
 	authors = Author.objects.all()
+	paginator = Paginator(authors, 5)
+	page = request.GET.get('page')
+	authors = paginator.get_page(page)
 	return render(request, 'authors/authors.html', context={ 'authors': authors })
 
 def author(request, author_id):
