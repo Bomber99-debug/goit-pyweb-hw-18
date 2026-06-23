@@ -89,7 +89,7 @@
                     </div>
                     {% for ten_tags in top_ten_tags %}
                         <div class="card-body">
-                            <a href="{% url 'quotes:quotes_tags.html' ten_tags.id %}" class="text-muted mb-0">
+                            <a href="{% url 'quotes:quotes_tags' ten_tags.id %}" class="text-muted mb-0">
                                 {{ ten_tags }}
                             </a>
                         </div>
