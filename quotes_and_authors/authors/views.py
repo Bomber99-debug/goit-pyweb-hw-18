@@ -7,7 +7,12 @@ from .forms import AuthorForm
 # Create your views here.
 def authors(request):
 	authors = Author.objects.all()
-	return render(request, 'authors/author.html', context={ 'authors': authors })
+	return render(request, 'authors/authors.html', context={ 'authors': authors })
+
+def author(request, author_id):
+	author = Author.objects.get(id=author_id)
+	return render(request, 'authors/author.html', { 'author': author})
+
 
 @login_required
 def add_author(request):

@@ -10,25 +10,14 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-4 col-rovs">
-            <div id="list-example" class="list-group">
-                {% for author in authors %}
-                    <a class="list-group-item list-group-item-action"
-                       href="#{{ author.fullname }}">{{ author.fullname }}</a>
-                {% endfor %}
-            </div>
-        </div>
         <div class="col-8">
             <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true"
                  class="scrollspy-example scroll-ex"
                  tabindex="0">
-                {% for author in authors %}
-                    <h4 id="{{ author.fullname }}">{{ author.fullname }}</h4>
-                    <p>{{ author.born_date }}</p>
-                    <p>{{ author.born_location }}</p>
-                    <p>{{ author.description }}</p>
-                {% endfor %}
+                <h4 id="{{ author.fullname }}">{{ author.fullname }}</h4>
+                <p>{{ author.born_date }}</p>
+                <p>{{ author.born_location }}</p>
+                <p>{{ author.description }}</p>
             </div>
         </div>
     </div>

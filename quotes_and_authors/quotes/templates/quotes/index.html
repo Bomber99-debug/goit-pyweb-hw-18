@@ -6,10 +6,20 @@
 
 {% block content %}
     {% for quote in quotes %}
-        <p>{{ quote.quote }}</p>
-        <p>{{ quote.author }}</p>
-        {% for tag in quote.tags.all %}
-            <p>{{ tag }}</p>
-        {% endfor %}
+        <div class="card">
+            <div class="card-body">
+                <p class="card-text">{{ quote.quote }}</p>
+                <p class="card-text">{{ quote.author }}</p>
+                {% for tag in quote.tags.all %}
+                    <p class="card-text">{{ tag }}</p>
+                {% endfor %}
+            </div>
+        </div>
     {% endfor %}
+            {% if quotes.has_previos %}
+            <a href="qoute.previous_page_nameber">Previos</a>
+        {% endif %}
+        {% if quotes.has_next %}
+            <a href="qoute.next_page_nameber">Next</a>
+        {% endif %}
 {% endblock %}

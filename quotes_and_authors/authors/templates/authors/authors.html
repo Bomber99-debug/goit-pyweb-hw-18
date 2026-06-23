@@ -1,0 +1,23 @@
+{% extends 'quotes_and_authors/base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>Authors</title>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'authors/style.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-4 col-rovs">
+            <div id="list-example" class="list-group">
+                {% for author in authors %}
+                    <a class="list-group-item list-group-item-action"
+                       href="{% url 'authors:author' author.id %}">{{ author.fullname }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

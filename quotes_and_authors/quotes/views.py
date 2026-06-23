@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 
@@ -12,6 +13,13 @@ def index(request):
 	quotes = Quote.objects.all()
 	authors = Author.objects.all()
 	tags = Tag.objects.all()
+
+	paginator = Paginator(quotes, 10)
+	print(f'paginator: {paginator}')
+	print(f'paginator: {paginator.num_pages}')
+	page = request.GET.get('page')
+	quotes = paginator.get_page(page)
+	print(quotes)
 	return render(
 			request,
 			'quotes/index.html',
