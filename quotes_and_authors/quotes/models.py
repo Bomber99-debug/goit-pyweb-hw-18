@@ -7,7 +7,7 @@ from tags.models import Tag
 class Quote(models.Model):
 	quote = models.TextField()
 	author = models.ForeignKey(Author, on_delete=models.CASCADE)
-	tags = models.ManyToManyField(Tag)
+	tags = models.ManyToManyField(Tag, related_name='quotes')
 
 	def __str__(self):
 		return self.quote

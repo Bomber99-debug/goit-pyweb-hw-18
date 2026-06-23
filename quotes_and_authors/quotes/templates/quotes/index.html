@@ -18,8 +18,10 @@
                             </blockquote>
 
                             <p class="text-muted mb-2">
-                                Author: {{ quote.author }}
-                                href="{% url 'authors:author' quote.author.id %}">{{ quote.author }}</a>
+                                Author:
+                                <a href="{% url 'authors:author' quote.author.id %}" class="fw-semibold">
+                                    {{ quote.author }}
+                                </a>
                             </p>
 
                             <div>
@@ -85,11 +87,13 @@
                     <div class="card-header">
                         Navigation
                     </div>
+                    {% for ten_tags in top_ten_tags %}
                     <div class="card-body">
                         <p class="text-muted mb-0">
-                            Тут потім можна вставити Top Ten tags.
+                            {{ ten_tags.id }}
                         </p>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
