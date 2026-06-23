@@ -29,10 +29,14 @@ def index(request):
 def quotes_tags(request, quotes_tag_id):
 	tags = get_object_or_404(Tag, id=quotes_tag_id)
 	quotes = tags.quotes.all()
+	paginator = Paginator(quotes, 5)
+	page = request.GET.get('page')
+	quotes = paginator.get_page(page)
+
 	top_ten_tags = Tag.objects.annotate(quote_count=Count('quotes')).order_by('-quote_count')[ :10 ]
 	return render(
 			request,
-			'quotes:quotes_tags.html',
+			'quotes/index.html',
 			{
 					'tags'        : tags,
 					'quotes'      : quotes,

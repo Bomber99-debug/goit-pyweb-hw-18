@@ -1,7 +1,7 @@
 {% extends 'quotes_and_authors/base.html' %}
 
 {% block title %}
-<title>Tags</title>
+    <title>Tags</title>
 {% endblock %}
 
 {% block content %}
@@ -11,7 +11,9 @@
                  class="scrollspy-example scroll-ex"
                  tabindex="0">
                 {% for tag in tags %}
-                    <h4 id="{{ tag.name }}">{{ tag.name }}</h4>
+                    <a href="{% url 'quotes:quotes_tags' tag.id %}" class="text-muted mb-0">
+                        <h4 id="{{ tag.name }}">{{ tag.name }}</h4>
+                    </a>
                 {% endfor %}
             </div>
         </div>

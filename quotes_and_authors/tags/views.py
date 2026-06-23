@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from .forms import TagForm
@@ -6,9 +6,10 @@ from .models import Tag
 
 
 # Create your views here.
-def tags(request):
+def tags(request, ):
 	tags = Tag.objects.all()
 	return render(request, 'tags/tags.html', { 'tags': tags })
+
 
 @login_required
 def add_tag(request):
