@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import MongoDBImportForm
 from .services import import_data
+from .scraping_site import scrapi_data
 
 
 # Create your views here.
@@ -21,3 +22,8 @@ def mongo_import(request):
 			import_data(data)
 			messages.success(request, 'Дані успішно імпортовано')
 	return render(request, 'external_sources/mongo_import.html', { 'form': form })
+
+@login_required
+def scrapi_import(request):
+	scrapi_data()
+	return render(request)

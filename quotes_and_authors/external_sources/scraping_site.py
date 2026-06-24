@@ -141,7 +141,7 @@ def get_next_page_path(soup: BeautifulSoup) -> str | None:
 	return next_page_link.get('href')
 
 
-def main() -> None:
+def scrapi_data() -> None:
 	base_url = 'https://quotes.toscrape.com'
 	next_page_path = '/'
 	page_number = '1'
