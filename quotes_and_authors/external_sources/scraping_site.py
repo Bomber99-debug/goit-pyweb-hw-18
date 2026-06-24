@@ -40,19 +40,6 @@ def extract_quotes_data(
 		yield quote_data
 
 
-def extract_tags_data(
-		soup: BeautifulSoup,
-		):
-	quote_blocks = soup.find_all('div', class_='quote')
-
-	for quote_block in quote_blocks:
-		tag_container = quote_block.find('div', class_='tags')
-
-		tag_elements = tag_container.find_all('a', class_='tag')
-		for tag_element in tag_elements:
-			yield tag_element.text
-
-
 def create_tag(tag: str) -> tuple[ str, Tag ]:
 	obj, created = Tag.objects.get_or_create(
 			name=tag,
@@ -141,7 +128,7 @@ def get_next_page_path(soup: BeautifulSoup) -> str | None:
 	return next_page_link.get('href')
 
 
-def scrapi_data() -> None:
+def scrapi_data() -> tuple[ int, int, int ]:
 	base_url = 'https://quotes.toscrape.com'
 	next_page_path = '/'
 	page_number = '1'
@@ -165,10 +152,9 @@ def scrapi_data() -> None:
 						executor.submit(extract_author_data, author_url),
 						)
 
-			for item in extract_tags_data(soup):
-				tags.add(item)
-
 			for quote_data in extract_quotes_data(soup):
+				for tag in quote_data[ 'tags' ]:
+					tags.add(tag)
 				all_quotes.append(quote_data)
 
 			next_page_path = get_next_page_path(soup)
@@ -176,8 +162,12 @@ def scrapi_data() -> None:
 			if next_page_path is not None:
 				page_number = re.search(r"\d+", next_page_path).group()
 
-		for tag in tags:
-			k, v = create_tag(tag)
+		len_tags = len(tags_map)
+		lne_author= len(authors_map)
+		len_quotes = len(all_quotes)
+
+		for quote in all_quotes:
+			k, v = create_tag(quote)
 			tags_map[ k ] = v
 
 		for author_future in author_futures:
@@ -201,3 +191,5 @@ def scrapi_data() -> None:
 				obj.tags.set(tags)
 			else:
 				continue
+
+		return len_tags, lne_author, len_quotes
