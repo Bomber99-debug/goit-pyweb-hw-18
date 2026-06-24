@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Author
 from .forms import AuthorForm
@@ -14,7 +14,7 @@ def authors(request):
 	return render(request, 'authors/authors.html', context={ 'authors': authors })
 
 def author(request, author_id):
-	author = Author.objects.get(id=author_id)
+	author = get_object_or_404(Author, id=author_id)
 	return render(request, 'authors/author.html', { 'author': author})
 
 
