@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-    <title>Author</title>
+    <title>MongoDB Import</title>
 {% endblock %}
 
 {% block styles %}
@@ -10,56 +10,125 @@
 {% endblock %}
 
 {% block content %}
-    <form class="flex" method="POST">
-        {% csrf_token %}
-        <label for="{{ form.username.id_for_label }}" class="form-label">
-            {{ form.username.label }}
-        </label>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
 
-        <div class="input-group mb-3">
-            {{ form.username }}
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-body-tertiary border-bottom">
+                        <h1 class="h3 mb-1">MongoDB Import</h1>
+                        <p class="text-muted mb-0">
+                            Enter your MongoDB connection data to import authors, quotes and tags.
+                        </p>
+                    </div>
+
+                    <div class="card-body p-4">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show"
+                                     role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <form method="POST">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="{{ form.username.id_for_label }}" class="form-label fw-semibold">
+                                    {{ form.username.label }}
+                                </label>
+                                {{ form.username }}
+
+                                {% if form.username.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ form.username.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.password.id_for_label }}" class="form-label fw-semibold">
+                                    {{ form.password.label }}
+                                </label>
+                                {{ form.password }}
+
+                                {% if form.password.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ form.password.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.db_name.id_for_label }}" class="form-label fw-semibold">
+                                    {{ form.db_name.label }}
+                                </label>
+                                {{ form.db_name }}
+
+                                {% if form.db_name.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ form.db_name.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.host.id_for_label }}" class="form-label fw-semibold">
+                                    {{ form.host.label }}
+                                </label>
+                                {{ form.host }}
+
+                                {% if form.host.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ form.host.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="{{ form.app_name.id_for_label }}" class="form-label fw-semibold">
+                                    {{ form.app_name.label }}
+                                </label>
+                                {{ form.app_name }}
+
+                                {% if form.app_name.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ form.app_name.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="alert alert-info mb-4" role="alert">
+                                Import expects MongoDB collections named
+                                <strong>author</strong> and <strong>quote</strong>.
+                                Tags will be taken from the <strong>tags</strong> field inside quotes.
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    Start MongoDB import
+                                </button>
+
+                                <a href="{% url 'external_sources:external_sources' %}"
+                                   class="btn btn-outline-secondary">
+                                    Back
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
         </div>
-
-        <label for="{{ form.password.id_for_label }}" class="form-label">
-            {{ form.password.label }}
-        </label>
-
-        <div class="input-group mb-3">
-            {{ form.password }}
-        </div>
-
-        <label for="{{ form.db_name.id_for_label }}" class="form-label">
-            {{ form.db_name.label }}
-        </label>
-
-        <div class="input-group mb-3">
-            {{ form.db_name }}
-        </div>
-
-        <label for="{{ form.host.id_for_label }}" class="form-label">
-            {{ form.host.label }}
-        </label>
-
-        <div class="input-group mb-3">
-            {{ form.host }}
-        </div>
-
-        <label for="{{ form.app_name.id_for_label }}" class="form-label">
-            {{ form.app_name.label }}
-        </label>
-
-        <div class="input-group mb-3">
-            {{ form.app_name }}
-        </div>
-        <p>Імпорт очікує колекції MongoDB: author та quote. Теги будуть взяті з поля tags у quotes.</p>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-    {% if messages %}
-        <div class="alert alert-light" role="alert">
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
-        </div>
-    {% endif %}
-
+    </div>
 {% endblock %}

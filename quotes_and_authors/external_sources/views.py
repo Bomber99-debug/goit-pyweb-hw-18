@@ -25,9 +25,9 @@ def mongo_import(request):
 
 @login_required
 def scrapi_import(request):
-	len_tags, lne_author, len_quotes = scrapi_data()
+	len_tags, len_author, len_quotes = scrapi_data()
 	return render(request, 'external_sources/external_sources.html', {
 			'len_tags': len_tags,
-			'lne_author': lne_author,
+			'len_author': len_author,
 			'len_quotes': len_quotes,
 			})

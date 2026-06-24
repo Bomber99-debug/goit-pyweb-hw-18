@@ -163,7 +163,7 @@ def scrapi_data() -> tuple[ int, int, int ]:
 				page_number = re.search(r"\d+", next_page_path).group()
 
 		len_tags = len(tags_map)
-		lne_author= len(authors_map)
+		len_author = len(authors_map)
 		len_quotes = len(all_quotes)
 
 		for quote in all_quotes:
@@ -192,4 +192,4 @@ def scrapi_data() -> tuple[ int, int, int ]:
 			else:
 				continue
 
-		return len_tags, lne_author, len_quotes
+		return len_tags, len_author, len_quotes
