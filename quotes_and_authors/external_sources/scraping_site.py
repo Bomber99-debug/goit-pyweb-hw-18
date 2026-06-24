@@ -166,8 +166,8 @@ def scrapi_data() -> tuple[ int, int, int ]:
 		len_author = len(authors_map)
 		len_quotes = len(all_quotes)
 
-		for quote in all_quotes:
-			k, v = create_tag(quote)
+		for tag in tags:
+			k, v = create_tag(tag)
 			tags_map[ k ] = v
 
 		for author_future in author_futures:
