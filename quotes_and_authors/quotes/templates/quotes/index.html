@@ -26,9 +26,9 @@
 
                             <div>
                                 {% for tag in quote.tags.all %}
-                                    <span class="badge text-bg-secondary me-1">
+                                    <a href="{% url 'quotes:quotes_tags' tag.id %}" class="badge text-bg-secondary me-1">
                                         {{ tag }}
-                                    </span>
+                                    </a>
                                 {% endfor %}
                             </div>
                         </div>
